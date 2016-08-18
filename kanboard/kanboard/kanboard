@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/app/common.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\EventDispatcher\Event;
+
+$container['dispatcher']->dispatch('console.bootstrap', new Event);
+
+$application = new Application('Kanboard', APP_VERSION);
+$application->add(new Console\TaskOverdueNotification($container));
+$application->add(new Console\SubtaskExport($container));
+$application->add(new Console\TaskExport($container));
+$application->add(new Console\ProjectDailyStatsCalculation($container));
+$application->add(new Console\ProjectDailyColumnStatsExport($container));
+$application->add(new Console\TransitionExport($container));
+$application->add(new Console\LocaleSync($container));
+$application->add(new Console\LocaleComparator($container));
+$application->run();
